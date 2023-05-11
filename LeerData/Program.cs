@@ -15,6 +15,8 @@ namespace LeerData
                    Console.WriteLine(item.Titulo+" "+item.PrecioPromocion.PrecioActual);
                }
             };
+              Console.WriteLine("--------------------------------------------------------------------");
+
              using(var Db=new AppVentaCursosContext()){
                var cursos=Db.Curso.Include(c=> c.ComentarioLista).AsNoTracking();
                foreach (var item in cursos)
@@ -26,7 +28,18 @@ namespace LeerData
                     }
                }
             };
-            
+            Console.WriteLine("--------------------------------------------------------------------");
+            using(var Db=new AppVentaCursosContext()){
+               var cursos=Db.Curso.Include(c=>c.InstructorLink).ThenInclude(ci=>ci.Instructor);//con este Query enlazo las tres tablas de muchos a muchos
+               foreach (var curso in cursos)
+               {
+                   Console.WriteLine(curso.Titulo);
+                   foreach (var insLink in curso.InstructorLink)
+                   {
+                       Console.WriteLine("****"+insLink.Instructor.Nombre);
+                   }
+               }
+            };
         }
     }
 }
